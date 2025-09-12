@@ -140,7 +140,7 @@ contrasts(df2$Muscle) <- contr.sum(nlevels(df2$Muscle))
 
 # Fit the model (REML = TRUE is standard for LMMs when you care about variance components)
 m2 <- lmer(Activation ~ exosuit*spacesuit + Muscle +
-             (1|Subject) + (1|Subject:Muscle),
+             (1|Subject) + (Muscle|Subject),
            data = df2, REML = TRUE)
 
 # Summaries: fixed effects (coefficients, SEs, t, p) and random effects variances
