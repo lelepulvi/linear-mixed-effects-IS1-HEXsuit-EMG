@@ -12,7 +12,8 @@
 4    TIB 6055
 5     VL 6055
 6     VM 6055
-For paired samples, 'repeated_measures_d()' provides more options.
+For paired samples, 'repeated_measures_d()' provides more
+  options.
 
 == Baseline vs NoIS1_HEXOff (paired t-test on Subject×Muscle means) ==
 
@@ -35,7 +36,7 @@ Hedges' g |        95% CI
 
 Merge decision (Baseline + NoIS1_HEXOff into single OFF/OFF bucket):  NO 
 
-== 2×2 counts after dropping DEACT ==
+== 2×2 counts after mapping ==
   spacesuit exosuit     n
 1       OFF     OFF 13596
 2       OFF      ON  7464
@@ -44,8 +45,11 @@ Merge decision (Baseline + NoIS1_HEXOff into single OFF/OFF bucket):  NO
 boundary (singular) fit: see help('isSingular')
 
 == LMM summary ==
-Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
-Formula: Activation ~ exosuit * spacesuit + Muscle + (1 | Subject) + (Muscle |      Subject)
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: 
+Activation ~ exosuit * spacesuit + Muscle + (1 | Subject) + (Muscle |  
+    Subject)
    Data: df2
 
 REML criterion at convergence: -448048.9
@@ -55,28 +59,47 @@ Scaled residuals:
 -5.6083 -0.3156 -0.0644  0.2395 15.8700 
 
 Random effects:
- Groups    Name        Variance  Std.Dev.  Corr                         
- Subject   (Intercept) 0.000e+00 0.0000000                              
- Subject.1 (Intercept) 3.942e-08 0.0001985                              
-           Muscle1     1.095e-07 0.0003309 -0.97                        
-           Muscle2     6.288e-07 0.0007929  0.54 -0.41                  
-           Muscle3     7.045e-08 0.0002654 -0.91  0.89 -0.64            
-           Muscle4     1.008e-06 0.0010039  0.61 -0.73  0.03 -0.74      
-           Muscle5     4.510e-07 0.0006716 -0.59  0.59 -0.73  0.85 -0.63
- Residual              2.555e-07 0.0005055                              
+ Groups    Name        Variance  Std.Dev.  Corr                   
+ Subject   (Intercept) 0.000e+00 0.0000000                        
+ Subject.1 (Intercept) 3.942e-08 0.0001985                        
+           Muscle1     1.095e-07 0.0003309 -0.97                  
+           Muscle2     6.288e-07 0.0007929  0.54 -0.41            
+           Muscle3     7.045e-08 0.0002654 -0.91  0.89 -0.64      
+           Muscle4     1.008e-06 0.0010039  0.61 -0.73  0.03 -0.74
+           Muscle5     4.510e-07 0.0006716 -0.59  0.59 -0.73  0.85
+ Residual              2.555e-07 0.0005055                        
+      
+      
+      
+      
+      
+      
+      
+ -0.63
+      
 Number of obs: 36330, groups:  Subject, 6
 
 Fixed effects:
-                        Estimate Std. Error         df t value Pr(>|t|)    
-(Intercept)            1.548e-03  8.117e-05  4.978e+00  19.067 7.60e-06 ***
-exosuitON             -9.669e-05  7.289e-06  3.629e+04 -13.265  < 2e-16 ***
-spacesuitON            2.702e-05  7.234e-06  3.628e+04   3.735 0.000188 ***
-Muscle1               -8.450e-04  1.352e-04  4.961e+00  -6.250 0.001581 ** 
-Muscle2                8.686e-04  3.238e-04  4.963e+00   2.683 0.044015 *  
-Muscle3               -1.014e-03  1.085e-04  4.942e+00  -9.348 0.000251 ***
-Muscle4                2.362e-03  4.099e-04  4.967e+00   5.763 0.002258 ** 
-Muscle5               -5.964e-04  2.742e-04  4.919e+00  -2.175 0.082540 .  
-exosuitON:spacesuitON -4.319e-05  1.096e-05  3.629e+04  -3.941 8.11e-05 ***
+                        Estimate Std. Error         df t value
+(Intercept)            1.548e-03  8.117e-05  4.978e+00  19.067
+exosuitON             -9.669e-05  7.289e-06  3.629e+04 -13.265
+spacesuitON            2.702e-05  7.234e-06  3.628e+04   3.735
+Muscle1               -8.450e-04  1.352e-04  4.961e+00  -6.250
+Muscle2                8.686e-04  3.238e-04  4.963e+00   2.683
+Muscle3               -1.014e-03  1.085e-04  4.942e+00  -9.348
+Muscle4                2.362e-03  4.099e-04  4.967e+00   5.763
+Muscle5               -5.964e-04  2.742e-04  4.919e+00  -2.175
+exosuitON:spacesuitON -4.319e-05  1.096e-05  3.629e+04  -3.941
+                      Pr(>|t|)    
+(Intercept)           7.60e-06 ***
+exosuitON              < 2e-16 ***
+spacesuitON           0.000188 ***
+Muscle1               0.001581 ** 
+Muscle2               0.044015 *  
+Muscle3               0.000251 ***
+Muscle4               0.002258 ** 
+Muscle5               0.082540 .  
+exosuitON:spacesuitON 8.11e-05 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
@@ -96,11 +119,16 @@ boundary (singular) fit: see help('isSingular')
 
 == Tests of fixed effects (Type II/III style) ==
 Type III Analysis of Variance Table with Satterthwaite's method
-                      Sum Sq    Mean Sq NumDF DenDF F value    Pr(>F)    
-exosuit           1.1908e-04 1.1908e-04     1 36294 466.104 < 2.2e-16 ***
-spacesuit         2.5000e-07 2.5000e-07     1 36294   0.980    0.3222    
-Muscle            1.4010e-04 2.8019e-05     5     5 109.669 4.212e-05 ***
-exosuit:spacesuit 3.9690e-06 3.9690e-06     1 36294  15.535 8.113e-05 ***
+                      Sum Sq    Mean Sq NumDF DenDF F value    Pr(>F)
+exosuit           1.1908e-04 1.1908e-04     1 36294 466.104 < 2.2e-16
+spacesuit         2.5000e-07 2.5000e-07     1 36294   0.980    0.3222
+Muscle            1.4010e-04 2.8019e-05     5     5 109.669 4.212e-05
+exosuit:spacesuit 3.9690e-06 3.9690e-06     1 36294  15.535 8.113e-05
+                     
+exosuit           ***
+spacesuit            
+Muscle            ***
+exosuit:spacesuit ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 Note: D.f. calculations have been disabled because the number of observations exceeds 3000.
@@ -202,31 +230,3 @@ Residual summary:
       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
 -2.835e-03 -1.595e-04 -3.253e-05  0.000e+00  1.211e-04  8.022e-03 
 Correlation(resid, fitted):  0.0002474197 
-
-================ HOW TO READ THE RESULTS ================
-
-A) Paired t-test (Baseline vs NoIS1_HEXOff):
-   - We averaged within Subject×Muscle first to avoid step-level pseudoreplication.
-   - If p ≥ 0.05 and |Hedges g| < 0.20 → they behave similarly; narrate as one OFF/OFF bucket.
-   - If not, report them separately in descriptions; the 2×2 model is still valid.
-
-B) LMM:
-   - exosuitON: average change in Activation with exosuit ON vs OFF,
-     averaged across muscles (effect coding) and accounting for Subject/Muscle baselines.
-   - spacesuitON: average change with spacesuit ON vs OFF.
-   - exosuitON:spacesuitON: whether the exosuit effect is different when the spacesuit is ON (synergy/attenuation).
-
-C) emmeans:
-   - ~ exosuit and ~ spacesuit: marginal means + OFF vs ON contrasts (clean main effects).
-   - ~ exosuit*spacesuit: the four cell means (OFF/OFF, ON/OFF, OFF/ON, ON/ON).
-     'by=' contrasts are simple effects (e.g., exosuit effect when spacesuit is ON only).
-
-D) Diagnostics:
-   - Residuals should look roughly normal and show no strong pattern vs fitted values.
-   - If skewed/heteroscedastic, consider transforming Activation (e.g., log1p)
-     and then request emmeans on the response scale: emmeans(..., type='response').
-
-E) Reporting:
-   - Provide estimates, 95% CIs, and p-values for main effects and interaction.
-   - Translate into physiology: e.g., a positive, significant exosuit main effect suggests
-     higher muscle activation on average with resistive loading.
