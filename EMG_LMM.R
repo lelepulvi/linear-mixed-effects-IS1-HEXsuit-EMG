@@ -11,7 +11,6 @@ if(length(to_install)) install.packages(to_install, dependencies = TRUE)
 invisible(lapply(need, library, character.only = TRUE))
 
 # ---- 1) Load long-format data ----
-# Data Path might need to be changed
 DATA_PATH_PREF  <- "C:/Users/ep15603/OneDrive - University of Bristol/Desktop/VIVO hub/4. ICEE.space project/2. EMG data/Gait_Outcomes_Master_20250911_1103.xlsx"       # <-- EDIT ME: put your .xlsx here (use forward slashes)
 SHEET_NAME <- "EMG_Stride_Long"
 
@@ -87,14 +86,14 @@ if (nrow(wide_pair) < 3) {
 # - Baseline       → spacesuit OFF, exosuit OFF
 # - NoIS1_HEXOff   → spacesuit OFF, exosuit OFF
 # - NoIS1_HEXOn    → spacesuit OFF, exosuit ON
-# - IS1On_NoHEX    → spacesuit ON,  exosuit DEACT we actually don't have this one (drop this for the 2×2)
+# - IS1On_NoHEX    → spacesuit ON,  exosuit OFF
 # - IS1On_HEXOn    → spacesuit ON,  exosuit ON
 map_2x2 <- tribble(
   ~Condition,        ~spacesuit, ~exosuit,
   "Baseline",        "OFF",      "OFF",
   "NoIS1_HEXOff",    "OFF",      "OFF",
   "NoIS1_HEXOn",     "OFF",      "ON",
-  "IS1On_NoHEX",     "ON",       "DEACT",
+  "IS1On_NoHEX",     "ON",       "OFF",
   "IS1On_HEXOn",     "ON",       "ON"
 )
 
@@ -103,9 +102,9 @@ df2 <- df %>%
   left_join(map_2x2, by = "Condition") %>%                 # add spacesuit/exosuit columns
   mutate(
     spacesuit = factor(spacesuit, levels = c("OFF","ON")),# ensure consistent ordering
-    exosuit   = factor(exosuit,   levels = c("OFF","ON","DEACT"))
+    exosuit   = factor(exosuit,   levels = c("OFF","ON"))
   ) %>%
-  filter(exosuit %in% c("OFF","ON"))                      # remove DEACT to get a clean 2×2
+  filter(exosuit %in% c("OFF","ON"))                      
 
 # Create a merged condition label for plots/tables (not used in the model fit)
 if (isTRUE(merge_offoff)) {
@@ -139,10 +138,13 @@ print(df2 %>% count(spacesuit, exosuit))
 contrasts(df2$Muscle) <- contr.sum(nlevels(df2$Muscle))
 
 # Fit the model (REML = TRUE is standard for LMMs when you care about variance components)
-m2 <- lmer(Activation ~ exosuit*spacesuit + Muscle +
-             (1|Subject) + (Muscle|Subject),
-           data = df2, REML = TRUE)
+#m2 <- lmer(Activation ~ exosuit*spacesuit + Muscle +
+ #            (1|Subject) + (1|Subject:Muscle),
+  #         data = df2, REML = TRUE)
 
+m2 <- lmer(Activation ~ exosuit*spacesuit + Muscle +
+                         (1|Subject) + (Muscle|Subject),
+                      data = df2, REML = TRUE)
 # Summaries: fixed effects (coefficients, SEs, t, p) and random effects variances
 cat("\n== LMM summary ==\n")
 print(summary(m2))
