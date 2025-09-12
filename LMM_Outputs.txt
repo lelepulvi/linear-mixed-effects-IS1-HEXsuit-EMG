@@ -1,0 +1,209 @@
+== Data summary ==
+     Condition    n
+1     Baseline 6156
+2 NoIS1_HEXOff 7440
+3  NoIS1_HEXOn 7464
+4  IS1On_NoHEX 7644
+5  IS1On_HEXOn 7626
+  Muscle    n
+1     BF 6055
+2     GM 6055
+3     RF 6055
+4    TIB 6055
+5     VL 6055
+6     VM 6055
+For paired samples, 'repeated_measures_d()' provides more options.
+
+== Baseline vs NoIS1_HEXOff (paired t-test on Subject×Muscle means) ==
+
+	Paired t-test
+
+data:  wide_pair$Baseline and wide_pair$NoIS1_HEXOff
+t = 1.4073, df = 35, p-value = 0.1682
+alternative hypothesis: true mean difference is not equal to 0
+95 percent confidence interval:
+ -5.103967e-05  2.816828e-04
+sample estimates:
+mean difference 
+   0.0001153216 
+
+
+Effect size (Hedges' g, paired):
+Hedges' g |        95% CI
+-------------------------
+0.23      | [-0.10, 0.55]
+
+Merge decision (Baseline + NoIS1_HEXOff into single OFF/OFF bucket):  NO 
+
+== 2×2 counts after dropping DEACT ==
+  spacesuit exosuit     n
+1       OFF     OFF 13596
+2       OFF      ON  7464
+3        ON      ON  7626
+fixed-effect model matrix is rank deficient so dropping 1 column / coefficient
+boundary (singular) fit: see help('isSingular')
+
+== LMM summary ==
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: 
+Activation ~ exosuit * spacesuit + Muscle + (1 | Subject) + (Muscle |  
+    Subject)
+   Data: df2
+
+REML criterion at convergence: -354701.2
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-5.4059 -0.3156 -0.0507  0.2546 15.8844 
+
+Random effects:
+ Groups    Name        Variance  Std.Dev.  Corr                         
+ Subject   (Intercept) 0.000e+00 0.0000000                              
+ Subject.1 (Intercept) 4.630e-08 0.0002152                              
+           Muscle1     1.055e-07 0.0003247 -0.96                        
+           Muscle2     6.837e-07 0.0008269  0.67 -0.50                  
+           Muscle3     8.350e-08 0.0002890 -0.92  0.89 -0.69            
+           Muscle4     1.066e-06 0.0010322  0.56 -0.68  0.02 -0.72      
+           Muscle5     4.251e-07 0.0006520 -0.68  0.64 -0.71  0.91 -0.66
+ Residual              2.470e-07 0.0004970                              
+Number of obs: 28686, groups:  Subject, 6
+
+Fixed effects:
+              Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)  1.549e-03  8.795e-05  5.001e+00  17.609 1.08e-05 ***
+exosuitON   -9.814e-05  7.170e-06  2.863e+04 -13.689  < 2e-16 ***
+spacesuitON -1.609e-05  8.093e-06  2.865e+04  -1.988 0.046810 *  
+Muscle1     -8.493e-04  1.327e-04  4.987e+00  -6.398 0.001395 ** 
+Muscle2      8.047e-04  3.376e-04  5.000e+00   2.383 0.062895 .  
+Muscle3     -1.012e-03  1.181e-04  4.988e+00  -8.561 0.000362 ***
+Muscle4      2.450e-03  4.215e-04  4.993e+00   5.813 0.002136 ** 
+Muscle5     -5.943e-04  2.663e-04  4.989e+00  -2.232 0.076098 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) exstON spcsON Muscl1 Muscl2 Muscl3 Muscl4
+exosuitON   -0.029                                          
+spacesuitON  0.000 -0.570                                   
+Muscle1     -0.962  0.000  0.000                            
+Muscle2      0.668  0.000  0.000 -0.498                     
+Muscle3     -0.913  0.000  0.000  0.885 -0.686              
+Muscle4      0.556  0.000  0.000 -0.681  0.023 -0.720       
+Muscle5     -0.678  0.000  0.000  0.642 -0.707  0.903 -0.658
+fit warnings:
+fixed-effect model matrix is rank deficient so dropping 1 column / coefficient
+optimizer (nloptwrap) convergence code: 0 (OK)
+boundary (singular) fit: see help('isSingular')
+
+
+== Tests of fixed effects (Type II/III style) ==
+Missing cells for: exosuitOFF:spacesuitON.  
+Interpret type III hypotheses with care.
+Type III Analysis of Variance Table with Satterthwaite's method
+                      Sum Sq    Mean Sq NumDF DenDF  F value    Pr(>F)    
+exosuit           4.6289e-05 4.6289e-05     1 28634 187.3792 < 2.2e-16 ***
+spacesuit         9.7600e-07 9.7600e-07     1 28653   3.9525   0.04681 *  
+Muscle            1.7075e-04 3.4150e-05     5     5 138.2376 2.241e-05 ***
+exosuit:spacesuit                                                         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Note: D.f. calculations have been disabled because the number of observations exceeds 3000.
+To enable adjustments, add the argument 'pbkrtest.limit = 28686' (or larger)
+[or, globally, 'set emm_options(pbkrtest.limit = 28686)' or larger];
+but be warned that this may result in large computation time and memory use.
+Note: D.f. calculations have been disabled because the number of observations exceeds 3000.
+To enable adjustments, add the argument 'lmerTest.limit = 28686' (or larger)
+[or, globally, 'set emm_options(lmerTest.limit = 28686)' or larger];
+but be warned that this may result in large computation time and memory use.
+NOTE: Results may be misleading due to involvement in interactions
+Note: D.f. calculations have been disabled because the number of observations exceeds 3000.
+To enable adjustments, add the argument 'pbkrtest.limit = 28686' (or larger)
+[or, globally, 'set emm_options(pbkrtest.limit = 28686)' or larger];
+but be warned that this may result in large computation time and memory use.
+Note: D.f. calculations have been disabled because the number of observations exceeds 3000.
+To enable adjustments, add the argument 'lmerTest.limit = 28686' (or larger)
+[or, globally, 'set emm_options(lmerTest.limit = 28686)' or larger];
+but be warned that this may result in large computation time and memory use.
+NOTE: Results may be misleading due to involvement in interactions
+Note: D.f. calculations have been disabled because the number of observations exceeds 3000.
+To enable adjustments, add the argument 'pbkrtest.limit = 28686' (or larger)
+[or, globally, 'set emm_options(pbkrtest.limit = 28686)' or larger];
+but be warned that this may result in large computation time and memory use.
+Note: D.f. calculations have been disabled because the number of observations exceeds 3000.
+To enable adjustments, add the argument 'lmerTest.limit = 28686' (or larger)
+[or, globally, 'set emm_options(lmerTest.limit = 28686)' or larger];
+but be warned that this may result in large computation time and memory use.
+
+== Marginal means: exosuit ==
+ exosuit  emmean       SE  df asymp.LCL asymp.UCL
+ OFF      nonEst       NA  NA        NA        NA
+ ON      0.00144 8.79e-05 Inf   0.00127   0.00161
+
+Results are averaged over the levels of: spacesuit, Muscle 
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+Pairwise contrast (exosuit):
+ contrast estimate SE df z.ratio p.value
+ OFF - ON   nonEst NA NA      NA      NA
+
+Results are averaged over the levels of: spacesuit, Muscle 
+Degrees-of-freedom method: asymptotic 
+
+== Marginal means: spacesuit ==
+ spacesuit emmean       SE  df asymp.LCL asymp.UCL
+ OFF       0.0015 8.79e-05 Inf   0.00133   0.00167
+ ON        nonEst       NA  NA        NA        NA
+
+Results are averaged over the levels of: exosuit, Muscle 
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+Pairwise contrast (spacesuit):
+ contrast estimate SE df z.ratio p.value
+ OFF - ON   nonEst NA NA      NA      NA
+
+Results are averaged over the levels of: exosuit, Muscle 
+Degrees-of-freedom method: asymptotic 
+
+== Cell means (exosuit × spacesuit) and simple effects ==
+ exosuit spacesuit  emmean       SE  df asymp.LCL asymp.UCL
+ OFF     OFF       0.00155 8.79e-05 Inf   0.00138   0.00172
+ ON      OFF       0.00145 8.80e-05 Inf   0.00128   0.00162
+ OFF     ON         nonEst       NA  NA        NA        NA
+ ON      ON        0.00143 8.80e-05 Inf   0.00126   0.00161
+
+Results are averaged over the levels of: Muscle 
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+Simple effects of exosuit within spacesuit levels:
+spacesuit = OFF:
+ exosuit_pairwise estimate       SE  df z.ratio p.value
+ OFF - ON         9.81e-05 7.17e-06 Inf  13.689  <.0001
+
+spacesuit = ON:
+ exosuit_pairwise estimate       SE  df z.ratio p.value
+ OFF - ON           nonEst       NA  NA      NA      NA
+
+Results are averaged over the levels of: Muscle 
+Degrees-of-freedom method: asymptotic 
+
+Simple effects of spacesuit within exosuit levels:
+exosuit = OFF:
+ spacesuit_pairwise estimate       SE  df z.ratio p.value
+ OFF - ON             nonEst       NA  NA      NA      NA
+
+exosuit = ON:
+ spacesuit_pairwise estimate       SE  df z.ratio p.value
+ OFF - ON           1.61e-05 8.09e-06 Inf   1.988  0.0468
+
+Results are averaged over the levels of: Muscle 
+Degrees-of-freedom method: asymptotic 
+
+== Quick diagnostics ==
+Residual summary:
+      Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
+-0.0026869 -0.0001569 -0.0000252  0.0000000  0.0001265  0.0078950 
+Correlation(resid, fitted):  0.0002966876 
