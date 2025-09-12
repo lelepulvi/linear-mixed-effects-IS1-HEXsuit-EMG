@@ -116,11 +116,11 @@ if (isTRUE(merge_offoff)) {
 } else {
   df2 <- df2 %>%
     mutate(Condition_Merged = forcats::fct_relevel(Condition,
-                                                   "Baseline","NoIS1_HEXOff","NoIS1_HEXOn","IS1On_HEXOn"))
+                                                   "Baseline","NoIS1_HEXOff","NoIS1_HEXOn","IS1On_NoHEX","IS1On_HEXOn"))
 }
 
 # Show the 2×2 cell counts so you can confirm design balance
-cat("\n== 2×2 counts after dropping DEACT ==\n")
+cat("\n== 2×2 counts after mapping ==\n")
 print(df2 %>% count(spacesuit, exosuit))
 
 # ---- 4) Fit the LMM -----------------------------------------------------------
