@@ -143,7 +143,7 @@ contrasts(df2$Muscle) <- contr.sum(nlevels(df2$Muscle))
   #         data = df2, REML = TRUE)
 
 m2 <- lmer(Activation ~ exosuit*spacesuit + Muscle +
-                         (1|Subject) + (Muscle|Subject),
+                         (1|Subject) + (0 + Muscle|Subject),
                       data = df2, REML = TRUE)
 # Summaries: fixed effects (coefficients, SEs, t, p) and random effects variances
 cat("\n== LMM summary ==\n")
@@ -175,6 +175,7 @@ cat("\nSimple effects of exosuit within spacesuit levels:\n")
 print(contrast(emm_inter, interaction = "pairwise", by = "spacesuit"))
 cat("\nSimple effects of spacesuit within exosuit levels:\n")
 print(contrast(emm_inter, interaction = "pairwise", by = "exosuit"))
+
 
 # ---- 6) Quick diagnostics ------------------------------------------------------
 # Basic numerical checks on residuals; plots are commented for non-interactive runs
