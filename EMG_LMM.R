@@ -191,6 +191,9 @@ cat("Correlation(resid, fitted): ", suppressWarnings(cor(res, fitted_vals)), "\n
 # plot(fitted_vals, res,
 #      main="Residuals vs Fitted", xlab="Fitted", ylab="Residuals"); abline(h=0,lty=2)
 
+
+
+
 # ---- 7) Interpretation crib sheet ---------------------------------------------
 cat("\n================ HOW TO READ THE RESULTS ================\n")
 cat("
@@ -220,3 +223,100 @@ E) Reporting:
    - Translate into physiology: e.g., a positive, significant exosuit main effect suggests
      higher muscle activation on average with resistive loading.
 ")
+
+# ============================
+# Pretty EMM plots (SVG, white bg)
+# ============================
+if (!dir.exists("outputs")) dir.create("outputs", recursive = TRUE)
+
+suppressPackageStartupMessages({
+  library(ggplot2)
+  library(dplyr)
+  library(emmeans)
+})
+
+# Ensure SVG device is available
+if (!"svglite" %in% rownames(installed.packages())) install.packages("svglite")
+library(svglite)
+
+# Robust CI extractor (always yields lower.CL / upper.CL)
+safe_emm_df <- function(emm_obj, level = 0.95) {
+  df <- as.data.frame(confint(emm_obj, level = level))
+  nm <- names(df)
+  if (all(c("asymp.LCL","asymp.UCL") %in% nm)) {
+    df <- dplyr::rename(df, lower.CL = asymp.LCL, upper.CL = asymp.UCL)
+  } else if (all(c("LCL","UCL") %in% nm)) {
+    df <- dplyr::rename(df, lower.CL = LCL, upper.CL = UCL)
+  }
+  if ("exosuit"   %in% nm) df$exosuit   <- factor(df$exosuit,   levels = c("OFF","ON"))
+  if ("spacesuit" %in% nm) df$spacesuit <- factor(df$spacesuit, levels = c("OFF","ON"))
+  df
+}
+
+# Theme & palette (explicit white background)
+theme_pub <- function(base_size = 12) {
+  theme_minimal(base_size = base_size) +
+    theme(
+      panel.grid.minor = element_blank(),
+      panel.grid.major.x = element_blank(),
+      strip.background  = element_rect(fill = "grey95", colour = NA),
+      strip.text        = element_text(face = "bold"),
+      plot.title        = element_text(face = "bold"),
+      axis.title        = element_text(face = "bold"),
+      panel.background  = element_rect(fill = "white", colour = NA),
+      plot.background   = element_rect(fill = "white", colour = NA)
+    )
+}
+pal2 <- c("OFF" = "#1b9e77", "ON" = "#d95f02")
+
+# Build plotting data
+stopifnot(exists("emm_inter"), exists("emm_exo"), exists("emm_suit"))
+df_cells <- safe_emm_df(emm_inter) %>% filter(is.finite(emmean))
+df_exo   <- safe_emm_df(emm_exo)    %>% filter(is.finite(emmean))
+df_suit  <- safe_emm_df(emm_suit)   %>% filter(is.finite(emmean))
+
+# Helpful to check you actually have rows:
+# print(df_cells); print(df_exo); print(df_suit)
+
+# 1) 2×2 cell means
+p_cells <- ggplot(df_cells, aes(x = exosuit, y = emmean,
+                                group = spacesuit, colour = spacesuit)) +
+  geom_line(position = position_dodge(width = 0.25), linewidth = 0.9) +
+  geom_point(position = position_dodge(width = 0.25), size = 2.5) +
+  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
+                width = 0.1, linewidth = 0.6,
+                position = position_dodge(width = 0.25)) +
+  scale_colour_manual(values = pal2, name = "Spacesuit") +
+  # Small values: label nicely
+  scale_y_continuous(labels = scales::label_scientific(digits = 2)) +
+  labs(x = "Exosuit", y = "EMG (estimated marginal mean)",
+       title = "EMG EMMs by Exosuit × Spacesuit (averaged across muscles)") +
+  theme_pub()
+
+ggsave("outputs/fig_emm_cells_2x2.svg", p_cells, width = 7, height = 4, bg = "white", device = "svg")
+ggsave("outputs/fig_emm_cells_2x2.png", p_cells, width = 7, height = 4, dpi = 300, bg = "white")
+
+# 2) Marginal means: Exosuit
+p_exo <- ggplot(df_exo, aes(x = exosuit, y = emmean, colour = exosuit)) +
+  geom_point(size = 2.8) +
+  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL), width = 0.08, linewidth = 0.6) +
+  scale_colour_manual(values = pal2, guide = "none") +
+  scale_y_continuous(labels = scales::label_scientific(digits = 2)) +
+  labs(x = "Exosuit", y = "EMG (EMM)", title = "Marginal means: Exosuit") +
+  theme_pub()
+
+ggsave("outputs/fig_emm_marginal_exosuit.svg", p_exo, width = 4, height = 3.2, bg = "white", device = "svg")
+ggsave("outputs/fig_emm_marginal_exosuit.png",  p_exo, width = 4, height = 3.2, dpi = 300, bg = "white")
+
+# 3) Marginal means: Spacesuit
+p_suit <- ggplot(df_suit, aes(x = spacesuit, y = emmean, colour = spacesuit)) +
+  geom_point(size = 2.8) +
+  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL), width = 0.08, linewidth = 0.6) +
+  scale_colour_manual(values = pal2, guide = "none") +
+  scale_y_continuous(labels = scales::label_scientific(digits = 2)) +
+  labs(x = "Spacesuit", y = "EMG (EMM)", title = "Marginal means: Spacesuit") +
+  theme_pub()
+
+ggsave("outputs/fig_emm_marginal_spacesuit.svg", p_suit, width = 4, height = 3.2, bg = "white", device = "svg")
+ggsave("outputs/fig_emm_marginal_spacesuit.png",  p_suit, width = 4, height = 3.2, dpi = 300, bg = "white")
+
